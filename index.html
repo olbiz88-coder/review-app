@@ -16,7 +16,8 @@
 const { useState, useRef } = React;
 
 /* ============ 部署前改这里 ============ */
-const FB_PAGE     = "christinenlp";                  // 你的 FB 专页用户名(→ 学员会被直接带到推荐区写评论)
+const FB_PAGE     = "christinenlp";                  // 你的 FB 专页用户名(电脑端会直达推荐区)
+const FB_DEEPLINK = "https://urlgeni.us/facebook/kbxWWr";  // 手机深度链接(稳定打开你的专页);留空则用上面的 FB_PAGE
 const FB_NAME     = "christine NLP 智慧私塾";       // 专页名称(显示用)
 const GOOGLE_LINK = "";                              // 暂时留空 = 不显示 Google;以后想加,再把评论链接/PlaceID 填进引号里就行
 /* ===================================== */
@@ -201,10 +202,10 @@ JSON 格式: {"review":"...","xhs_title":"...","xhs_body":"..."}
             <div className="mt-6 space-y-3">
               <button className={dark} onClick={()=>copy(review,"rev")}>{copiedKey==="rev"?"✓ 已复制!":"复制文案"}</button>
               {platform==="fb"
-                ? <a href={buildFbUrl(FB_PAGE)} target="_blank" rel="noopener noreferrer" className={orange}>去 Facebook 发布 ↗</a>
+                ? <a href={FB_DEEPLINK || buildFbUrl(FB_PAGE)} target="_blank" rel="noopener noreferrer" className={orange}>去 Facebook 发布 ↗</a>
                 : <a href={googleUrl} target="_blank" rel="noopener noreferrer" className={orange}>去 Google 发布 ↗</a>}
             </div>
-            <div className="mt-4 text-xs text-stone-400 text-center">{platform==="fb"?"复制文案 → 点按钮直达推荐区 → 选「推荐 Yes」→ 粘贴并发布 ❤":"复制文案 → 点按钮直达评论框 → 打星 → 粘贴并发布 ❤"}</div>
+                          <div className="mt-4 text-xs text-stone-400 text-center leading-relaxed">{platform==="fb"?"复制文案 → 点按钮打开我的专页 → 手机请点「More 更多 → 推荐」→ 选 Yes、粘贴发布 ❤(电脑会直接到评论区)":"复制文案 → 点按钮直达评论框 → 打星 → 粘贴并发布 ❤"}</div>
           </div>)}
           {platform==="xhs" && (
           <div>
