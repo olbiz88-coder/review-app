@@ -91,7 +91,7 @@ function App(){
   }
   async function generate(){
     setError(""); setStep("generating"); setPlatform("fb");
-    const prompt = `你是帮学员整理上课心得的文案助手。根据学员真实回答,生成两种版本的文案。只输出 JSON,不要 markdown、不要解释。
+    const prompt = `你是帮学员整理上课心得的文案助手。根据学员真实回答,生成两种版本的文案。
 
 课程:${finalCourse}
 上课前困扰:${answers.before}
@@ -100,18 +100,22 @@ function App(){
 想推荐给谁:${answers.recommend||"(未填)"}
 评分:${rating} 星
 
-JSON 格式: {"review":"...","xhs_title":"...","xhs_body":"..."}
-
-- review:第一人称评论文案,用于 Facebook / Google 评论。简体中文,真诚、自然、有温度,像真实学员亲口说的,不浮夸、不 AI 腔。贴近 35–55 岁马来西亚华人女性口吻。自然带出课程名和具体改变,结尾温和推荐给有需要的人。约 120–200 字。
-- xhs_title:小红书风格标题,口语化、有点击欲,可带 1–2 个 emoji,不超过 20 字。
-- xhs_body:小红书笔记正文,口语、真诚,用 emoji 自然分段,讲她的转变故事,结尾另起一行放 4–5 个相关话题标签(如 #自我价值 #内在成长 #NLP #把心安顿好)。约 150–250 字。`;
+请严格按以下格式输出,不要有任何额外说明或开场白,三行标记必须原样出现:
+===REVIEW===
+第一人称评论文案,用于 Facebook / Google 评论。简体中文,真诚自然有温度,像真实学员亲口说的,不浮夸、不 AI 腔。贴近 35–55 岁马来西亚华人女性口吻。自然带出课程名和具体改变,结尾温和推荐给有需要的人。约 120–200 字。
+===XHS_TITLE===
+小红书风格标题,口语化、有点击欲,可带 1–2 个 emoji,不超过 20 字。
+===XHS_BODY===
+小红书笔记正文,口语、真诚,用 emoji 自然分段,讲她的转变故事,结尾放 4–5 个相关话题标签如 #自我价值 #内在成长 #NLP #把心安顿好。约 150–250 字。`;
     try{
       const res=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
       const data=await res.json();
-      let text=(data.content||[]).map(b=>b.type==="text"?b.text:"").join("").trim();
-      text=text.replace(/```json/gi,"").replace(/```/g,"").trim();
-      const p=JSON.parse(text);
-      setReview(p.review||""); setXhsTitle(p.xhs_title||""); setXhsBody(p.xhs_body||"");
+      const text=(data.content||[]).map(b=>b.type==="text"?b.text:"").join("");
+      if(!text || text.indexOf("===REVIEW===")<0) throw new Error("bad");
+      const grab=(a,b)=>{ var s=text.indexOf(a); if(s<0) return ""; var f=s+a.length; var e=b?text.indexOf(b,f):text.length; if(e<0)e=text.length; return text.slice(f,e).trim(); };
+      setReview(grab("===REVIEW===","===XHS_TITLE==="));
+      setXhsTitle(grab("===XHS_TITLE===","===XHS_BODY==="));
+      setXhsBody(grab("===XHS_BODY===",null));
       setStep("result");
     }catch(err){ setError("生成时遇到一点状况,请再试一次。"); setStep("form"); }
   }
