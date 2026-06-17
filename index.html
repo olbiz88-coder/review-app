@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+html<!DOCTYPE html>
 <html lang="zh">
 <head>
 <meta charset="UTF-8" />
@@ -18,21 +18,21 @@ const { useState, useRef } = React;
 /* ============ 部署前改这里 ============ */
 const FB_PAGE     = "christinenlp";                  // 你的 FB 专页用户名(电脑端会直达推荐区)
 const FB_DEEPLINK = "https://urlgeni.us/facebook/kbxWWr";  // 手机深度链接(稳定打开你的专页);留空则用上面的 FB_PAGE
-const FB_NAME     = "christine NLP 智慧私塾";       // 专页名称(显示用)
-const GOOGLE_LINK = "";                              // 暂时留空 = 不显示 Google;以后想加,再把评论链接/PlaceID 填进引号里就行
+const FB_NAME     = "christine NLP 智慧私塾";        // 专页名称(显示用)
+const GOOGLE_LINK = "";                              // 暂时留空 = 不显示 Google;以后想加,再把评论链接/PlaceID 填进引号里
 /* ===================================== */
 
 const COURSES = ["《把心安顿好》工作坊","NLP 执行师认证课程","一对一咨询 / 教练","心理资本工作坊","其他"];
 const QUESTIONS = [
-  { key:"before",    label:"上课前,你最大的困扰或卡住的地方是什么?", ph:"例如:常常太在意别人的看法,情绪容易被影响…" },
-  { key:"moment",    label:"课程中,哪个部分让你印象最深?",         ph:"例如:老师带我们做的那个练习,让我突然看见…" },
-  { key:"change",    label:"课后,你感觉自己有什么改变?",           ph:"例如:现在遇到事情,我比较能稳住自己…" },
-  { key:"recommend", label:"你最想推荐给谁?",                       ph:"例如:身边总是为别人而活、忘了自己的姐妹…" },
+  { key:"part",      label:"课程中,哪个部分或练习让你最有收获?", ph:"例如:某个练习、某个观念,让我印象很深…" },
+  { key:"teacher",   label:"你最欣赏 Christine 老师带课的哪一点?", ph:"例如:很有耐心、讲解清楚、很会带气氛…" },
+  { key:"gain",      label:"上完课后,你最大的收获是什么?",       ph:"例如:学到实用的方法、看事情更清楚、更懂得照顾自己…" },
+  { key:"recommend", label:"你会推荐给什么样的人?",               ph:"例如:想成长、想更认识自己、想学新方法的朋友…" },
 ];
 
 function buildFbUrl(input){
   let s=(input||"").trim(); if(!s) return "";
-  if(/facebook\.com\/(share|profile\.php)/i.test(s)) return s; // 分享短链等无法直达评论区,原样打开专页
+  if(/facebook\.com\/(share|profile\.php)/i.test(s)) return s;
   s=s.replace(/^https?:\/\//i,"").replace(/^www\./i,"").replace(/^(m\.|web\.)?facebook\.com\//i,"");
   s=s.replace(/\/+$/,"").replace(/\/reviews$/i,"");
   return "https://www.facebook.com/"+s.split(/[/?#]/)[0]+"/reviews/";
@@ -67,7 +67,7 @@ function App(){
   const [step,setStep]=useState("welcome");
   const [course,setCourse]=useState("");
   const [customCourse,setCustomCourse]=useState("");
-  const [answers,setAnswers]=useState({before:"",moment:"",change:"",recommend:""});
+  const [answers,setAnswers]=useState({part:"",teacher:"",gain:"",recommend:""});
   const [rating,setRating]=useState(0);
   const [hover,setHover]=useState(0);
   const [images,setImages]=useState([]);
@@ -80,7 +80,7 @@ function App(){
   const [copiedKey,setCopiedKey]=useState("");
 
   const finalCourse = course==="其他"?customCourse:course;
-  const formValid = finalCourse.trim() && answers.before.trim() && answers.change.trim() && rating>0;
+  const formValid = finalCourse.trim() && answers.part.trim() && answers.gain.trim() && rating>0;
   const googleUrl = buildGoogleUrl(GOOGLE_LINK);
   const tabs=[{id:"fb",name:"Facebook"}]; if(googleUrl) tabs.push({id:"google",name:"Google"}); tabs.push({id:"xhs",name:"小红书"});
 
@@ -91,22 +91,22 @@ function App(){
   }
   async function generate(){
     setError(""); setStep("generating"); setPlatform("fb");
-    const prompt = `你是帮学员整理上课心得的文案助手。根据学员真实回答,生成两种版本的文案。
+    const prompt = `你是帮学员整理"上课心得"的文案助手。这是一篇要公开张贴的好评,请只聚焦【课程内容、Christine 老师、学到的方法与收获、值得推荐之处】。绝对不要提及或暗示学员有任何心理、情绪问题或个人困扰,也不要写"我以前很焦虑/很自卑"这类暴露隐私的内容。
 
 课程:${finalCourse}
-上课前困扰:${answers.before}
-印象最深:${answers.moment||"(未填)"}
-课后改变:${answers.change}
-想推荐给谁:${answers.recommend||"(未填)"}
+最有收获的部分:${answers.part}
+最欣赏老师的地方:${answers.teacher||"(未填)"}
+最大的收获:${answers.gain}
+会推荐给:${answers.recommend||"(未填)"}
 评分:${rating} 星
 
 请严格按以下格式输出,不要有任何额外说明或开场白,三行标记必须原样出现:
 ===REVIEW===
-第一人称评论文案,用于 Facebook / Google 评论。简体中文,真诚自然有温度,像真实学员亲口说的,不浮夸、不 AI 腔。贴近 35–55 岁马来西亚华人女性口吻。自然带出课程名和具体改变,结尾温和推荐给有需要的人。约 120–200 字。
+第一人称好评,用于 Facebook / Google。简体中文,真诚自然有温度,像真实学员亲口说的,不浮夸、不 AI 腔。贴近 35–55 岁马来西亚华人女性口吻。重点写:课程哪里好、Christine 老师哪里好、自己学到或收获了什么、推荐给什么样的人。不要提及任何个人心理或情绪问题。约 120–200 字。
 ===XHS_TITLE===
 小红书风格标题,口语化、有点击欲,可带 1–2 个 emoji,不超过 20 字。
 ===XHS_BODY===
-小红书笔记正文,口语、真诚,用 emoji 自然分段,讲她的转变故事,结尾放 4–5 个相关话题标签如 #自我价值 #内在成长 #NLP #把心安顿好。约 150–250 字。`;
+小红书笔记正文,同样聚焦课程与收获、口语真诚,用 emoji 自然分段,不暴露任何个人问题,结尾放 4–5 个相关话题标签如 #自我成长 #NLP #把心安顿好 #终身学习。约 150–250 字。`;
     try{
       const res=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
       const data=await res.json();
@@ -124,7 +124,7 @@ function App(){
     try{document.execCommand("copy");}catch(e){} document.body.removeChild(ta);
     setCopiedKey(key); setTimeout(()=>setCopiedKey(""),2000);
   }
-  function reset(){ setStep("welcome"); setCourse(""); setCustomCourse(""); setAnswers({before:"",moment:"",change:"",recommend:""}); setRating(0); setImages([]); setReview(""); setXhsTitle(""); setXhsBody(""); setError(""); setPlatform("fb"); }
+  function reset(){ setStep("welcome"); setCourse(""); setCustomCourse(""); setAnswers({part:"",teacher:"",gain:"",recommend:""}); setRating(0); setImages([]); setReview(""); setXhsTitle(""); setXhsBody(""); setError(""); setPlatform("fb"); }
 
   const btn="w-full font-medium py-4 rounded-2xl transition flex items-center justify-center gap-2";
   const orange=btn+" bg-orange-500 hover:bg-orange-600 text-white shadow-md";
@@ -159,7 +159,7 @@ function App(){
           <div className="mt-5 space-y-5">
             {QUESTIONS.map(q=>(
             <div key={q.key}>
-              <label className="block text-slate-800 font-medium mb-2">{q.label}{(q.key==="before"||q.key==="change")&&<span className="text-orange-500">*</span>}</label>
+              <label className="block text-slate-800 font-medium mb-2">{q.label}{(q.key==="part"||q.key==="gain")&&<span className="text-orange-500">*</span>}</label>
               <textarea value={answers[q.key]} onChange={e=>setAnswers({...answers,[q.key]:e.target.value})} placeholder={q.ph} rows={3} className="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" />
             </div>))}
           </div>
@@ -209,7 +209,7 @@ function App(){
                 ? <a href={FB_DEEPLINK || buildFbUrl(FB_PAGE)} target="_blank" rel="noopener noreferrer" className={orange}>去 Facebook 发布 ↗</a>
                 : <a href={googleUrl} target="_blank" rel="noopener noreferrer" className={orange}>去 Google 发布 ↗</a>}
             </div>
-                          <div className="mt-4 text-xs text-stone-400 text-center leading-relaxed">{platform==="fb"?"复制文案 → 点按钮打开我的专页 → 手机请点「More 更多 → 推荐」→ 选 Yes、粘贴发布 ❤(电脑会直接到评论区)":"复制文案 → 点按钮直达评论框 → 打星 → 粘贴并发布 ❤"}</div>
+            <div className="mt-4 text-xs text-amber-800 bg-amber-50 rounded-xl p-3 text-left leading-relaxed">{platform==="fb"?"① 复制文案 ② 点按钮打开 Facebook ③ 若看到的是你自己的 FB,请在搜索栏搜「christine NLP 智慧私塾」进我的专页 ④ 点 More(更多)→ 推荐 → 粘贴发布 ❤":"复制文案 → 点按钮直达评论框 → 打星 → 粘贴并发布 ❤"}</div>
           </div>)}
           {platform==="xhs" && (
           <div>
