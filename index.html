@@ -4,234 +4,272 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>把心安顿好 · 学员回馈</title>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:-apple-system,"Segoe UI",sans-serif;}</style>
 </head>
-<body>
-<div id="root"></div>
+<body class="min-h-screen w-full bg-gradient-to-b from-amber-50 via-stone-50 to-orange-50 flex items-center justify-center p-4">
+<div class="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-stone-100">
+  <div class="bg-gradient-to-r from-slate-800 to-blue-900 px-6 py-4 flex items-center gap-2">
+    <span class="text-orange-300 text-lg">❤</span><span class="text-white font-medium">把心安顿好</span>
+  </div>
+  <div class="p-6">
 
-<script type="text/babel" data-presets="react">
-const { useState, useRef } = React;
+    <section id="s-welcome" class="text-center py-6">
+      <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-orange-100 flex items-center justify-center text-3xl">✨</div>
+      <h1 class="text-2xl font-bold text-slate-800 mb-3">谢谢你的同行 🌿</h1>
+      <p class="text-stone-600 mb-1">花 2 分钟,简单回答几个问题</p>
+      <p class="text-stone-600 mb-8">让我帮你把这趟旅程的收获,整理成一段真心话</p>
+      <button id="btn-start" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl">开始 →</button>
+    </section>
 
-/* ============ 部署前改这里 ============ */
-const FB_PAGE     = "christinenlp";                  // 你的 FB 专页用户名(电脑端会直达推荐区)
-const FB_DEEPLINK = "https://urlgeni.us/facebook/kbxWWr";  // 手机深度链接(稳定打开你的专页);留空则用上面的 FB_PAGE
-const FB_NAME     = "christine NLP 智慧私塾";        // 专页名称(显示用)
-const GOOGLE_LINK = "";                              // 暂时留空 = 不显示 Google;以后想加,再把评论链接/PlaceID 填进引号里
-/* ===================================== */
+    <section id="s-form" class="hidden">
+      <div id="form-err" class="hidden mb-4 bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl"></div>
+      <label class="block text-slate-800 font-medium mb-2">你上的是哪一个课程?<span class="text-orange-500">*</span></label>
+      <div id="course-list" class="grid grid-cols-2 gap-2 mb-2"></div>
+      <input id="custom-course" class="hidden w-full mb-2 px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700" placeholder="请输入课程名称" />
+      <div class="mt-5 space-y-5">
+        <div>
+          <label class="block text-slate-800 font-medium mb-2">课程中,哪个部分或练习让你最有收获?<span class="text-orange-500">*</span></label>
+          <textarea id="q-part" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" placeholder="例如:某个练习、某个观念,让我印象很深…"></textarea>
+        </div>
+        <div>
+          <label class="block text-slate-800 font-medium mb-2">你最欣赏 Christine 老师带课的哪一点?</label>
+          <textarea id="q-teacher" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" placeholder="例如:很有耐心、讲解清楚、很会带气氛…"></textarea>
+        </div>
+        <div>
+          <label class="block text-slate-800 font-medium mb-2">上完课后,你最大的收获是什么?<span class="text-orange-500">*</span></label>
+          <textarea id="q-gain" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" placeholder="例如:学到实用的方法、看事情更清楚、更懂得照顾自己…"></textarea>
+        </div>
+        <div>
+          <label class="block text-slate-800 font-medium mb-2">你会推荐给什么样的人?</label>
+          <textarea id="q-recommend" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" placeholder="例如:想成长、想更认识自己、想学新方法的朋友…"></textarea>
+        </div>
+      </div>
+      <div class="mt-6">
+        <label class="block text-slate-800 font-medium mb-3">为这次课程打个分<span class="text-orange-500">*</span></label>
+        <div id="stars" class="flex gap-2 justify-center text-4xl"></div>
+      </div>
+      <div class="mt-6">
+        <label class="block text-slate-800 font-medium mb-2">上传照片 <span class="text-stone-400 text-sm font-normal">(选填)</span></label>
+        <div id="img-list" class="flex flex-wrap gap-2"></div>
+        <input id="file-input" type="file" accept="image/*" multiple class="hidden" />
+      </div>
+      <button id="btn-generate" class="w-full mt-8 bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl">✨ 生成我的回馈</button>
+    </section>
 
-const COURSES = ["《把心安顿好》工作坊","NLP 执行师认证课程","一对一咨询 / 教练","心理资本工作坊","其他"];
-const QUESTIONS = [
-  { key:"part",      label:"课程中,哪个部分或练习让你最有收获?", ph:"例如:某个练习、某个观念,让我印象很深…" },
-  { key:"teacher",   label:"你最欣赏 Christine 老师带课的哪一点?", ph:"例如:很有耐心、讲解清楚、很会带气氛…" },
-  { key:"gain",      label:"上完课后,你最大的收获是什么?",       ph:"例如:学到实用的方法、看事情更清楚、更懂得照顾自己…" },
-  { key:"recommend", label:"你会推荐给什么样的人?",               ph:"例如:想成长、想更认识自己、想学新方法的朋友…" },
-];
+    <section id="s-generating" class="hidden text-center py-16">
+      <div class="text-4xl mb-4 animate-pulse">✍️</div>
+      <p class="text-slate-700 font-medium mb-1">正在帮你整理这段心里话…</p>
+      <p class="text-stone-400 text-sm">请稍候几秒</p>
+    </section>
 
-function buildFbUrl(input){
-  let s=(input||"").trim(); if(!s) return "";
-  if(/facebook\.com\/(share|profile\.php)/i.test(s)) return s;
-  s=s.replace(/^https?:\/\//i,"").replace(/^www\./i,"").replace(/^(m\.|web\.)?facebook\.com\//i,"");
-  s=s.replace(/\/+$/,"").replace(/\/reviews$/i,"");
-  return "https://www.facebook.com/"+s.split(/[/?#]/)[0]+"/reviews/";
-}
-function buildGoogleUrl(input){
-  let s=(input||"").trim(); if(!s) return "";
-  if(/^https?:\/\//i.test(s)) return s;
-  if(/^g\.page\//i.test(s)) return "https://"+s;
-  return "https://search.google.com/local/writereview?placeid="+s;
-}
-function compressImage(file,maxW=900,q=0.7){
-  return new Promise((resolve)=>{
-    const r=new FileReader();
-    r.onload=(e)=>{ const img=new Image(); img.onload=()=>{
-      const scale=Math.min(1,maxW/img.width); const c=document.createElement("canvas");
-      c.width=img.width*scale; c.height=img.height*scale;
-      c.getContext("2d").drawImage(img,0,0,c.width,c.height);
-      resolve(c.toDataURL("image/jpeg",q));
-    }; img.src=e.target.result; };
-    r.readAsDataURL(file);
+    <section id="s-result" class="hidden">
+      <div class="text-center mb-5">
+        <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center text-2xl">✓</div>
+        <h2 class="text-xl font-bold text-slate-800">你的回馈已经写好啦</h2>
+        <p class="text-stone-500 text-sm mt-1">选一个平台,可直接修改文字</p>
+      </div>
+      <div id="tabs" class="flex gap-2 mb-4 bg-stone-100 p-1 rounded-xl"></div>
+      <div id="sec-review" class="hidden">
+        <textarea id="review-text" rows="8" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none bg-stone-50"></textarea>
+        <div id="result-stars" class="flex items-center gap-1 mt-3 justify-center text-xl"></div>
+        <div id="photo-reminder" class="hidden mt-4 bg-amber-50 rounded-xl p-3 text-sm text-amber-800">💡 别忘了发布时把你的照片一起上传哦!</div>
+        <div class="mt-6 space-y-3">
+          <button id="btn-copy-review" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-4 rounded-2xl">复制文案</button>
+          <a id="btn-publish" href="#" target="_blank" rel="noopener noreferrer" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl flex items-center justify-center">去 Facebook 发布 ↗</a>
+        </div>
+        <div id="review-hint" class="mt-4 text-xs text-amber-800 bg-amber-50 rounded-xl p-3 text-left leading-relaxed"></div>
+      </div>
+      <div id="sec-xhs" class="hidden">
+        <label class="block text-slate-700 text-sm font-medium mb-1">标题</label>
+        <input id="xhs-title" class="w-full px-4 py-3 mb-3 rounded-xl border border-stone-200 outline-none text-slate-700 bg-stone-50" />
+        <label class="block text-slate-700 text-sm font-medium mb-1">正文</label>
+        <textarea id="xhs-body" rows="9" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none bg-stone-50"></textarea>
+        <div class="mt-4 bg-rose-50 rounded-xl p-3 text-sm text-rose-700">📕 小红书要自己发笔记:复制全文 → 打开小红书 → 发新笔记 → 粘贴 + 配上你的照片</div>
+        <div class="mt-5 space-y-3">
+          <button id="btn-copy-xhs" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-4 rounded-2xl">复制标题 + 正文</button>
+          <a href="https://www.xiaohongshu.com" target="_blank" rel="noopener noreferrer" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl flex items-center justify-center">打开小红书 ↗</a>
+        </div>
+      </div>
+      <div class="mt-5 bg-amber-50 rounded-xl p-3 text-xs text-amber-800 text-center leading-relaxed">💡 也想发到其他平台?发完回来,点上方标签切换即可,文案都还在 🌿</div>
+      <button id="btn-reset" class="w-full mt-4 text-stone-400 text-sm">完成 · 返回首页</button>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  var FB_PAGE="christinenlp";
+  var FB_DEEPLINK="https://urlgeni.us/facebook/kbxWWr";
+  var FB_NAME="christine NLP 智慧私塾";
+  var GOOGLE_LINK="";
+
+  var COURSES=["《把心安顿好》工作坊","NLP 执行师认证课程","一对一咨询 / 教练","心理资本工作坊","其他"];
+  var state={course:"",rating:0,images:[],platform:"fb",review:"",xhsTitle:"",xhsBody:""};
+
+  function $(id){return document.getElementById(id);}
+  function show(id){["s-welcome","s-form","s-generating","s-result"].forEach(function(s){$(s).classList.add("hidden");});$(id).classList.remove("hidden");window.scrollTo(0,0);}
+
+  function buildFbUrl(input){
+    var s=(input||"").trim(); if(!s) return "";
+    if(/facebook\.com\/(share|profile\.php)/i.test(s)) return s;
+    s=s.replace(/^https?:\/\//i,"").replace(/^www\./i,"").replace(/^(m\.|web\.)?facebook\.com\//i,"");
+    s=s.replace(/\/+$/,"").replace(/\/reviews$/i,"");
+    return "https://www.facebook.com/"+s.split(/[/?#]/)[0]+"/reviews/";
+  }
+  function buildGoogleUrl(input){
+    var s=(input||"").trim(); if(!s) return "";
+    if(/^https?:\/\//i.test(s)) return s;
+    if(/^g\.page\//i.test(s)) return "https://"+s;
+    return "https://search.google.com/local/writereview?placeid="+s;
+  }
+
+  var courseList=$("course-list");
+  COURSES.forEach(function(c){
+    var b=document.createElement("button");
+    b.textContent=c;
+    b.className="text-sm px-3 py-2.5 rounded-xl border text-left border-stone-200 text-stone-600";
+    b.onclick=function(){
+      state.course=c;
+      Array.prototype.forEach.call(courseList.children,function(x){x.className="text-sm px-3 py-2.5 rounded-xl border text-left border-stone-200 text-stone-600";});
+      b.className="text-sm px-3 py-2.5 rounded-xl border text-left border-orange-400 bg-orange-50 text-orange-700";
+      $("custom-course").classList.toggle("hidden", c!=="其他");
+    };
+    courseList.appendChild(b);
   });
-}
-function Star({filled,size=36,onClick,onEnter,onLeave}){
-  return (<svg onClick={onClick} onMouseEnter={onEnter} onMouseLeave={onLeave}
-    width={size} height={size} viewBox="0 0 24 24"
-    fill={filled?"#fb923c":"none"} stroke={filled?"#fb923c":"#e7e5e4"} strokeWidth="2"
-    style={{cursor:onClick?"pointer":"default"}}>
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>);
-}
 
-function App(){
-  const [step,setStep]=useState("welcome");
-  const [course,setCourse]=useState("");
-  const [customCourse,setCustomCourse]=useState("");
-  const [answers,setAnswers]=useState({part:"",teacher:"",gain:"",recommend:""});
-  const [rating,setRating]=useState(0);
-  const [hover,setHover]=useState(0);
-  const [images,setImages]=useState([]);
-  const [error,setError]=useState("");
-  const fileRef=useRef(null);
-  const [review,setReview]=useState("");
-  const [xhsTitle,setXhsTitle]=useState("");
-  const [xhsBody,setXhsBody]=useState("");
-  const [platform,setPlatform]=useState("fb");
-  const [copiedKey,setCopiedKey]=useState("");
+  var starsEl=$("stars");
+  for(var i=1;i<=5;i++){(function(n){
+    var sp=document.createElement("span");
+    sp.textContent="★"; sp.style.cursor="pointer"; sp.className="text-stone-200";
+    sp.onclick=function(){state.rating=n;updateStars();};
+    starsEl.appendChild(sp);
+  })(i);}
+  function updateStars(){Array.prototype.forEach.call(starsEl.children,function(sp,idx){sp.className=(idx<state.rating)?"text-orange-400":"text-stone-200";});}
+  function renderResultStars(){var el=$("result-stars");el.innerHTML="";for(var i=0;i<5;i++){var sp=document.createElement("span");sp.textContent="★";sp.className=(i<state.rating)?"text-orange-400":"text-stone-200";el.appendChild(sp);}}
 
-  const finalCourse = course==="其他"?customCourse:course;
-  const formValid = finalCourse.trim() && answers.part.trim() && answers.gain.trim() && rating>0;
-  const googleUrl = buildGoogleUrl(GOOGLE_LINK);
-  const tabs=[{id:"fb",name:"Facebook"}]; if(googleUrl) tabs.push({id:"google",name:"Google"}); tabs.push({id:"xhs",name:"小红书"});
-
-  async function handleFiles(e){
-    const files=Array.from(e.target.files||[]).slice(0,4); const out=[];
-    for(const f of files){ try{ out.push(await compressImage(f)); }catch(err){} }
-    setImages(prev=>[...prev,...out].slice(0,4));
+  $("file-input").addEventListener("change",function(e){
+    var files=Array.prototype.slice.call(e.target.files||[]).slice(0,4);
+    files.forEach(function(f){
+      var reader=new FileReader();
+      reader.onload=function(ev){
+        var img=new Image();
+        img.onload=function(){
+          var scale=Math.min(1,900/img.width);var c=document.createElement("canvas");
+          c.width=img.width*scale;c.height=img.height*scale;
+          c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+          if(state.images.length<4){state.images.push(c.toDataURL("image/jpeg",0.7));renderImages();}
+        };
+        img.src=ev.target.result;
+      };
+      reader.readAsDataURL(f);
+    });
+    e.target.value="";
+  });
+  function renderImages(){
+    var el=$("img-list");el.innerHTML="";
+    state.images.forEach(function(src,i){
+      var d=document.createElement("div");
+      d.className="relative w-20 h-20 rounded-xl overflow-hidden border border-stone-200";
+      d.innerHTML='<img src="'+src+'" class="w-full h-full object-cover"/>';
+      var rm=document.createElement("button");
+      rm.textContent="×";rm.className="absolute top-1 right-1 bg-black/50 rounded-full w-5 h-5 text-white text-xs";
+      rm.onclick=function(){state.images.splice(i,1);renderImages();};
+      d.appendChild(rm);el.appendChild(d);
+    });
+    if(state.images.length<4){
+      var add=document.createElement("button");
+      add.textContent="📷";add.className="w-20 h-20 rounded-xl border-2 border-dashed border-stone-300 text-stone-400 text-2xl";
+      add.onclick=function(){$("file-input").click();};
+      el.appendChild(add);
+    }
   }
-  async function generate(){
-    setError(""); setStep("generating"); setPlatform("fb");
-    const prompt = `你是帮学员整理"上课心得"的文案助手。这是一篇要公开张贴的好评,请只聚焦【课程内容、Christine 老师、学到的方法与收获、值得推荐之处】。绝对不要提及或暗示学员有任何心理、情绪问题或个人困扰,也不要写"我以前很焦虑/很自卑"这类暴露隐私的内容。
+  renderImages();
 
-课程:${finalCourse}
-最有收获的部分:${answers.part}
-最欣赏老师的地方:${answers.teacher||"(未填)"}
-最大的收获:${answers.gain}
-会推荐给:${answers.recommend||"(未填)"}
-评分:${rating} 星
+  $("btn-start").onclick=function(){show("s-form");};
+  $("btn-reset").onclick=function(){resetAll();show("s-welcome");};
 
-请严格按以下格式输出,不要有任何额外说明或开场白,三行标记必须原样出现:
-===REVIEW===
-第一人称好评,用于 Facebook / Google。简体中文,真诚自然有温度,像真实学员亲口说的,不浮夸、不 AI 腔。贴近 35–55 岁马来西亚华人女性口吻。重点写:课程哪里好、Christine 老师哪里好、自己学到或收获了什么、推荐给什么样的人。不要提及任何个人心理或情绪问题。约 120–200 字。
-===XHS_TITLE===
-小红书风格标题,口语化、有点击欲,可带 1–2 个 emoji,不超过 20 字。
-===XHS_BODY===
-小红书笔记正文,同样聚焦课程与收获、口语真诚,用 emoji 自然分段,不暴露任何个人问题,结尾放 4–5 个相关话题标签如 #自我成长 #NLP #把心安顿好 #终身学习。约 150–250 字。`;
-    try{
-      const res=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
-      const data=await res.json();
-      const text=(data.content||[]).map(b=>b.type==="text"?b.text:"").join("");
-      if(!text || text.indexOf("===REVIEW===")<0) throw new Error("bad");
-      const grab=(a,b)=>{ var s=text.indexOf(a); if(s<0) return ""; var f=s+a.length; var e=b?text.indexOf(b,f):text.length; if(e<0)e=text.length; return text.slice(f,e).trim(); };
-      setReview(grab("===REVIEW===","===XHS_TITLE==="));
-      setXhsTitle(grab("===XHS_TITLE===","===XHS_BODY==="));
-      setXhsBody(grab("===XHS_BODY===",null));
-      setStep("result");
-    }catch(err){ setError("生成时遇到一点状况,请再试一次。"); setStep("form"); }
+  function resetAll(){
+    state.course="";state.rating=0;state.images=[];state.platform="fb";state.review="";state.xhsTitle="";state.xhsBody="";
+    Array.prototype.forEach.call(courseList.children,function(x){x.className="text-sm px-3 py-2.5 rounded-xl border text-left border-stone-200 text-stone-600";});
+    $("custom-course").value="";$("custom-course").classList.add("hidden");
+    $("q-part").value="";$("q-teacher").value="";$("q-gain").value="";$("q-recommend").value="";
+    updateStars();renderImages();$("form-err").classList.add("hidden");
   }
-  function copy(text,key){
-    const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta); ta.select();
-    try{document.execCommand("copy");}catch(e){} document.body.removeChild(ta);
-    setCopiedKey(key); setTimeout(()=>setCopiedKey(""),2000);
+
+  $("btn-generate").onclick=function(){
+    var finalCourse=state.course==="其他"?$("custom-course").value.trim():state.course;
+    var part=$("q-part").value.trim(),gain=$("q-gain").value.trim();
+    if(!finalCourse||!part||!gain||state.rating<1){
+      var err=$("form-err");err.textContent="请填写带 * 的必填项(课程、最有收获的部分、最大的收获、评分)";err.classList.remove("hidden");window.scrollTo(0,0);return;
+    }
+    $("form-err").classList.add("hidden");
+    doGenerate(finalCourse,part,$("q-teacher").value.trim(),gain,$("q-recommend").value.trim());
+  };
+
+  function doGenerate(course,part,teacher,gain,recommend){
+    show("s-generating");
+    var prompt='你是帮学员整理"上课心得"的文案助手。这是一篇要公开张贴的好评,请只聚焦【课程内容、Christine 老师、学到的方法与收获、值得推荐之处】。绝对不要提及或暗示学员有任何心理、情绪问题或个人困扰,也不要写"我以前很焦虑/很自卑"这类暴露隐私的内容。\n\n课程:'+course+'\n最有收获的部分:'+part+'\n最欣赏老师的地方:'+(teacher||"(未填)")+'\n最大的收获:'+gain+'\n会推荐给:'+(recommend||"(未填)")+'\n评分:'+state.rating+' 星\n\n请严格按以下格式输出,不要有任何额外说明或开场白,三行标记必须原样出现:\n===REVIEW===\n第一人称好评,用于 Facebook / Google。简体中文,真诚自然有温度,像真实学员亲口说的,不浮夸、不 AI 腔。贴近 35-55 岁马来西亚华人女性口吻。重点写:课程哪里好、Christine 老师哪里好、自己学到或收获了什么、推荐给什么样的人。不要提及任何个人心理或情绪问题。约 120-200 字。\n===XHS_TITLE===\n小红书风格标题,口语化、有点击欲,可带 1-2 个 emoji,不超过 20 字。\n===XHS_BODY===\n小红书笔记正文,同样聚焦课程与收获、口语真诚,用 emoji 自然分段,不暴露任何个人问题,结尾放 4-5 个相关话题标签如 #自我成长 #NLP #把心安顿好 #终身学习。约 150-250 字。';
+    fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:prompt})})
+    .then(function(r){return r.json();})
+    .then(function(data){
+      var text=((data.content||[]).map(function(b){return b.type==="text"?b.text:"";})).join("");
+      if(!text||text.indexOf("===REVIEW===")<0) throw new Error("bad");
+      function grab(a,b){var s=text.indexOf(a);if(s<0)return "";var f=s+a.length;var e=b?text.indexOf(b,f):text.length;if(e<0)e=text.length;return text.slice(f,e).trim();}
+      state.review=grab("===REVIEW===","===XHS_TITLE===");
+      state.xhsTitle=grab("===XHS_TITLE===","===XHS_BODY===");
+      state.xhsBody=grab("===XHS_BODY===",null);
+      showResult();
+    })
+    .catch(function(){
+      var err=$("form-err");err.textContent="生成时遇到一点状况,请再试一次。";err.classList.remove("hidden");show("s-form");window.scrollTo(0,0);
+    });
   }
-  function reset(){ setStep("welcome"); setCourse(""); setCustomCourse(""); setAnswers({part:"",teacher:"",gain:"",recommend:""}); setRating(0); setImages([]); setReview(""); setXhsTitle(""); setXhsBody(""); setError(""); setPlatform("fb"); }
 
-  const btn="w-full font-medium py-4 rounded-2xl transition flex items-center justify-center gap-2";
-  const orange=btn+" bg-orange-500 hover:bg-orange-600 text-white shadow-md";
-  const dark=btn+" bg-slate-800 hover:bg-slate-900 text-white";
+  function tabIds(){var ids=["fb"];if(buildGoogleUrl(GOOGLE_LINK))ids.push("google");ids.push("xhs");return ids;}
+  function buildTabs(){
+    var names={fb:"Facebook",google:"Google",xhs:"小红书"};
+    var el=$("tabs");el.innerHTML="";
+    tabIds().forEach(function(id){
+      var b=document.createElement("button");
+      b.textContent=names[id];
+      b.onclick=function(){state.platform=id;renderPlatform();};
+      el.appendChild(b);
+    });
+  }
+  function renderPlatform(){
+    var ids=tabIds();
+    Array.prototype.forEach.call($("tabs").children,function(b,idx){
+      b.className=(ids[idx]===state.platform)?"flex-1 text-sm py-2 rounded-lg font-medium bg-white text-slate-800 shadow-sm":"flex-1 text-sm py-2 rounded-lg font-medium text-stone-500";
+    });
+    if(state.platform==="xhs"){$("sec-review").classList.add("hidden");$("sec-xhs").classList.remove("hidden");}
+    else{
+      $("sec-xhs").classList.add("hidden");$("sec-review").classList.remove("hidden");
+      if(state.platform==="fb"){
+        $("btn-publish").textContent="去 Facebook 发布 ↗";
+        $("btn-publish").href=FB_DEEPLINK||buildFbUrl(FB_PAGE);
+        $("review-hint").textContent="① 复制文案 ② 点按钮打开 Facebook ③ 若看到的是你自己的 FB,请在搜索栏搜「"+FB_NAME+"」进我的专页 ④ 点 More(更多)→ 推荐 → 粘贴发布 ❤";
+      }else{
+        $("btn-publish").textContent="去 Google 发布 ↗";
+        $("btn-publish").href=buildGoogleUrl(GOOGLE_LINK);
+        $("review-hint").textContent="复制文案 → 点按钮直达评论框 → 打星 → 粘贴并发布 ❤";
+      }
+    }
+  }
+  function showResult(){
+    $("review-text").value=state.review;$("xhs-title").value=state.xhsTitle;$("xhs-body").value=state.xhsBody;
+    renderResultStars();
+    $("photo-reminder").classList.toggle("hidden",state.images.length===0);
+    buildTabs();state.platform="fb";renderPlatform();show("s-result");
+  }
 
-  return (
-  <div className="min-h-screen w-full bg-gradient-to-b from-amber-50 via-stone-50 to-orange-50 flex items-center justify-center p-4">
-    <div className="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-stone-100">
-      <div className="bg-gradient-to-r from-slate-800 to-blue-900 px-6 py-4 flex items-center gap-2">
-        <span className="text-orange-300 text-lg">❤</span><span className="text-white font-medium tracking-wide">把心安顿好</span>
-      </div>
-      <div className="p-6">
+  function copyText(t){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(ta);}
+  $("btn-copy-review").onclick=function(){copyText($("review-text").value);var b=$("btn-copy-review");b.textContent="✓ 已复制!";setTimeout(function(){b.textContent="复制文案";},2000);};
+  $("btn-copy-xhs").onclick=function(){copyText($("xhs-title").value+"\n\n"+$("xhs-body").value);var b=$("btn-copy-xhs");b.textContent="✓ 已复制全文!";setTimeout(function(){b.textContent="复制标题 + 正文";},2000);};
 
-        {step==="welcome" && (
-        <div className="text-center py-6">
-          <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-orange-100 flex items-center justify-center text-3xl">✨</div>
-          <h1 className="text-2xl font-bold text-slate-800 mb-3">谢谢你的同行 🌿</h1>
-          <p className="text-stone-600 mb-1">花 2 分钟,简单回答几个问题</p>
-          <p className="text-stone-600 mb-8">让我帮你把这趟旅程的收获,整理成一段真心话</p>
-          <button className={orange} onClick={()=>setStep("form")}>开始 →</button>
-        </div>)}
-
-        {step==="form" && (
-        <div>
-          <button onClick={()=>setStep("welcome")} className="text-stone-400 mb-4 text-sm">← 返回</button>
-          {error && <div className="mb-4 bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl">{error}</div>}
-          <label className="block text-slate-800 font-medium mb-2">你上的是哪一个课程?<span className="text-orange-500">*</span></label>
-          <div className="grid grid-cols-2 gap-2 mb-2">
-            {COURSES.map(c=>(<button key={c} onClick={()=>setCourse(c)} className={"text-sm px-3 py-2.5 rounded-xl border text-left "+(course===c?"border-orange-400 bg-orange-50 text-orange-700":"border-stone-200 text-stone-600")}>{c}</button>))}
-          </div>
-          {course==="其他" && <input value={customCourse} onChange={e=>setCustomCourse(e.target.value)} placeholder="请输入课程名称" className="w-full mb-2 px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700" />}
-          <div className="mt-5 space-y-5">
-            {QUESTIONS.map(q=>(
-            <div key={q.key}>
-              <label className="block text-slate-800 font-medium mb-2">{q.label}{(q.key==="part"||q.key==="gain")&&<span className="text-orange-500">*</span>}</label>
-              <textarea value={answers[q.key]} onChange={e=>setAnswers({...answers,[q.key]:e.target.value})} placeholder={q.ph} rows={3} className="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" />
-            </div>))}
-          </div>
-          <div className="mt-6">
-            <label className="block text-slate-800 font-medium mb-3">为这次课程打个分<span className="text-orange-500">*</span></label>
-            <div className="flex gap-2 justify-center">
-              {[1,2,3,4,5].map(n=>(<Star key={n} filled={n<=(hover||rating)} onClick={()=>setRating(n)} onEnter={()=>setHover(n)} onLeave={()=>setHover(0)} />))}
-            </div>
-          </div>
-          <div className="mt-6">
-            <label className="block text-slate-800 font-medium mb-2">上传照片 <span className="text-stone-400 text-sm font-normal">(选填)</span></label>
-            <div className="flex flex-wrap gap-2">
-              {images.map((src,i)=>(<div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden border border-stone-200"><img src={src} className="w-full h-full object-cover" /><button onClick={()=>setImages(images.filter((_,j)=>j!==i))} className="absolute top-1 right-1 bg-black/50 rounded-full w-5 h-5 text-white text-xs">×</button></div>))}
-              {images.length<4 && <button onClick={()=>fileRef.current.click()} className="w-20 h-20 rounded-xl border-2 border-dashed border-stone-300 text-stone-400 text-2xl">📷</button>}
-            </div>
-            <input ref={fileRef} type="file" accept="image/*" multiple onChange={handleFiles} className="hidden" />
-          </div>
-          <button onClick={generate} disabled={!formValid} className={formValid?orange+" mt-8":btn+" mt-8 bg-stone-100 text-stone-400 cursor-not-allowed"}>✨ 生成我的回馈</button>
-          {!formValid && <p className="text-center text-xs text-stone-400 mt-2">请填写带 * 的必填项</p>}
-        </div>)}
-
-        {step==="generating" && (
-        <div className="text-center py-16">
-          <div className="text-4xl mb-4 animate-pulse">✍️</div>
-          <p className="text-slate-700 font-medium mb-1">正在帮你整理这段心里话…</p>
-          <p className="text-stone-400 text-sm">请稍候几秒</p>
-        </div>)}
-
-        {step==="result" && (
-        <div>
-          <div className="text-center mb-5">
-            <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center text-2xl">✓</div>
-            <h2 className="text-xl font-bold text-slate-800">你的回馈已经写好啦</h2>
-            <p className="text-stone-500 text-sm mt-1">选一个平台,可直接修改文字</p>
-          </div>
-          <div className="flex gap-2 mb-4 bg-stone-100 p-1 rounded-xl">
-            {tabs.map(t=>(<button key={t.id} onClick={()=>setPlatform(t.id)} className={"flex-1 text-sm py-2 rounded-lg font-medium "+(platform===t.id?"bg-white text-slate-800 shadow-sm":"text-stone-500")}>{t.name}</button>))}
-          </div>
-          {(platform==="fb"||platform==="google") && (
-          <div>
-            <textarea value={review} onChange={e=>setReview(e.target.value)} rows={8} className="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none bg-stone-50" />
-            <div className="flex items-center gap-1 mt-3 justify-center">{[1,2,3,4,5].map(n=>(<Star key={n} filled={n<=rating} size={20} />))}</div>
-            {images.length>0 && <div className="mt-4 bg-amber-50 rounded-xl p-3 text-sm text-amber-800">💡 别忘了发布时把你的照片一起上传哦!</div>}
-            <div className="mt-6 space-y-3">
-              <button className={dark} onClick={()=>copy(review,"rev")}>{copiedKey==="rev"?"✓ 已复制!":"复制文案"}</button>
-              {platform==="fb"
-                ? <a href={FB_DEEPLINK || buildFbUrl(FB_PAGE)} target="_blank" rel="noopener noreferrer" className={orange}>去 Facebook 发布 ↗</a>
-                : <a href={googleUrl} target="_blank" rel="noopener noreferrer" className={orange}>去 Google 发布 ↗</a>}
-            </div>
-            <div className="mt-4 text-xs text-amber-800 bg-amber-50 rounded-xl p-3 text-left leading-relaxed">{platform==="fb"?"① 复制文案 ② 点按钮打开 Facebook ③ 若看到的是你自己的 FB,请在搜索栏搜「christine NLP 智慧私塾」进我的专页 ④ 点 More(更多)→ 推荐 → 粘贴发布 ❤":"复制文案 → 点按钮直达评论框 → 打星 → 粘贴并发布 ❤"}</div>
-          </div>)}
-          {platform==="xhs" && (
-          <div>
-            <label className="block text-slate-700 text-sm font-medium mb-1">标题</label>
-            <input value={xhsTitle} onChange={e=>setXhsTitle(e.target.value)} className="w-full px-4 py-3 mb-3 rounded-xl border border-stone-200 outline-none text-slate-700 bg-stone-50" />
-            <label className="block text-slate-700 text-sm font-medium mb-1">正文</label>
-            <textarea value={xhsBody} onChange={e=>setXhsBody(e.target.value)} rows={9} className="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none bg-stone-50" />
-            <div className="mt-4 bg-rose-50 rounded-xl p-3 text-sm text-rose-700">📕 小红书要自己发笔记:复制全文 → 打开小红书 → 发新笔记 → 粘贴 + 配上你的照片</div>
-            <div className="mt-5 space-y-3">
-              <button className={dark} onClick={()=>copy(xhsTitle+"\n\n"+xhsBody,"xhs")}>{copiedKey==="xhs"?"✓ 已复制全文!":"复制标题 + 正文"}</button>
-              <a href="https://www.xiaohongshu.com" target="_blank" rel="noopener noreferrer" className={orange}>打开小红书 ↗</a>
-            </div>
-          </div>)}
-          <div className="mt-5 bg-amber-50 rounded-xl p-3 text-xs text-amber-800 text-center leading-relaxed">💡 也想发到其他平台?发完回来,点上方标签切换即可,文案都还在 🌿</div>
-          <button onClick={reset} className="w-full mt-4 text-stone-400 text-sm">完成 · 返回首页</button>
-        </div>)}
-
-      </div>
-    </div>
-  </div>);
-}
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  updateStars();
+})();
 </script>
 </body>
 </html>
