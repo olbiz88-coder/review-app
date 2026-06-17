@@ -9,90 +9,92 @@
 </head>
 <body class="min-h-screen w-full bg-gradient-to-b from-amber-50 via-stone-50 to-orange-50 flex items-center justify-center p-4">
 <div class="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-stone-100">
-  <div class="bg-gradient-to-r from-slate-800 to-blue-900 px-6 py-4 flex items-center gap-2">
-    <span class="text-orange-300 text-lg">❤</span><span class="text-white font-medium">把心安顿好</span>
+  <div class="bg-gradient-to-r from-slate-800 to-blue-900 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2"><span class="text-orange-300 text-lg">❤</span><span class="text-white font-medium">把心安顿好</span></div>
+    <button id="lang-toggle" class="text-white text-xs border border-white/40 rounded-full px-3 py-1">EN</button>
   </div>
   <div class="p-6">
 
     <section id="s-welcome" class="text-center py-6">
       <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-orange-100 flex items-center justify-center text-3xl">✨</div>
-      <h1 class="text-2xl font-bold text-slate-800 mb-3">谢谢你的同行 🌿</h1>
-      <p class="text-stone-600 mb-1">花 2 分钟,简单回答几个问题</p>
-      <p class="text-stone-600 mb-8">让我帮你把这趟旅程的收获,整理成一段真心话</p>
-      <button id="btn-start" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl">开始 →</button>
+      <h1 class="text-2xl font-bold text-slate-800 mb-3" data-i18n="welcome_title">谢谢你的同行 🌿</h1>
+      <p class="text-stone-600 mb-1" data-i18n="welcome_l1">花 2 分钟,简单回答几个问题</p>
+      <p class="text-stone-600 mb-8" data-i18n="welcome_l2">让我帮你把这趟旅程的收获,整理成一段真心话</p>
+      <button id="btn-start" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl" data-i18n="start">开始 →</button>
     </section>
 
     <section id="s-form" class="hidden">
+      <button id="btn-back" class="text-stone-400 mb-4 text-sm" data-i18n="back">← 返回</button>
       <div id="form-err" class="hidden mb-4 bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl"></div>
-      <label class="block text-slate-800 font-medium mb-2">你上的是哪一个课程?<span class="text-orange-500">*</span></label>
+      <label class="block text-slate-800 font-medium mb-2"><span data-i18n="course_label">你上的是哪一个课程?</span><span class="text-orange-500"> *</span></label>
       <div id="course-list" class="grid grid-cols-2 gap-2 mb-2"></div>
-      <input id="custom-course" class="hidden w-full mb-2 px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700" placeholder="请输入课程名称" />
+      <input id="custom-course" class="hidden w-full mb-2 px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700" data-i18n-ph="custom_ph" placeholder="请输入课程名称" />
       <div class="mt-5 space-y-5">
         <div>
-          <label class="block text-slate-800 font-medium mb-2">课程中,哪个部分或练习让你最有收获?<span class="text-orange-500">*</span></label>
-          <textarea id="q-part" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" placeholder="例如:某个练习、某个观念,让我印象很深…"></textarea>
+          <label class="block text-slate-800 font-medium mb-2"><span data-i18n="q_part">课程中,哪个部分或练习让你最有收获?</span><span class="text-orange-500"> *</span></label>
+          <textarea id="q-part" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" data-i18n-ph="q_part_ph" placeholder="例如:某个练习、某个观念,让我印象很深…"></textarea>
         </div>
         <div>
-          <label class="block text-slate-800 font-medium mb-2">你最欣赏 Christine 老师带课的哪一点?</label>
-          <textarea id="q-teacher" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" placeholder="例如:很有耐心、讲解清楚、很会带气氛…"></textarea>
+          <label class="block text-slate-800 font-medium mb-2" data-i18n="q_teacher">你最欣赏 Christine 老师带课的哪一点?</label>
+          <textarea id="q-teacher" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" data-i18n-ph="q_teacher_ph" placeholder="例如:很有耐心、讲解清楚、很会带气氛…"></textarea>
         </div>
         <div>
-          <label class="block text-slate-800 font-medium mb-2">上完课后,你最大的收获是什么?<span class="text-orange-500">*</span></label>
-          <textarea id="q-gain" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" placeholder="例如:学到实用的方法、看事情更清楚、更懂得照顾自己…"></textarea>
+          <label class="block text-slate-800 font-medium mb-2"><span data-i18n="q_gain">上完课后,你最大的收获是什么?</span><span class="text-orange-500"> *</span></label>
+          <textarea id="q-gain" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" data-i18n-ph="q_gain_ph" placeholder="例如:学到实用的方法、看事情更清楚、更懂得照顾自己…"></textarea>
         </div>
         <div>
-          <label class="block text-slate-800 font-medium mb-2">你会推荐给什么样的人?</label>
-          <textarea id="q-recommend" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" placeholder="例如:想成长、想更认识自己、想学新方法的朋友…"></textarea>
+          <label class="block text-slate-800 font-medium mb-2" data-i18n="q_rec">你会推荐给什么样的人?</label>
+          <textarea id="q-recommend" rows="3" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none" data-i18n-ph="q_rec_ph" placeholder="例如:想成长、想更认识自己、想学新方法的朋友…"></textarea>
         </div>
       </div>
       <div class="mt-6">
-        <label class="block text-slate-800 font-medium mb-3">为这次课程打个分<span class="text-orange-500">*</span></label>
+        <label class="block text-slate-800 font-medium mb-3"><span data-i18n="rate_label">为这次课程打个分</span><span class="text-orange-500"> *</span></label>
         <div id="stars" class="flex gap-2 justify-center text-4xl"></div>
       </div>
       <div class="mt-6">
-        <label class="block text-slate-800 font-medium mb-2">上传照片 <span class="text-stone-400 text-sm font-normal">(选填)</span></label>
+        <label class="block text-slate-800 font-medium mb-2"><span data-i18n="photo_label">上传照片</span> <span class="text-stone-400 text-sm font-normal" data-i18n="photo_opt">(选填)</span></label>
         <div id="img-list" class="flex flex-wrap gap-2"></div>
         <input id="file-input" type="file" accept="image/*" multiple class="hidden" />
       </div>
-      <button id="btn-generate" class="w-full mt-8 bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl">✨ 生成我的回馈</button>
+      <button id="btn-generate" class="w-full mt-8 bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl" data-i18n="generate">✨ 生成我的回馈</button>
     </section>
 
     <section id="s-generating" class="hidden text-center py-16">
       <div class="text-4xl mb-4 animate-pulse">✍️</div>
-      <p class="text-slate-700 font-medium mb-1">正在帮你整理这段心里话…</p>
-      <p class="text-stone-400 text-sm">请稍候几秒</p>
+      <p class="text-slate-700 font-medium mb-1" data-i18n="generating1">正在帮你整理这段心里话…</p>
+      <p class="text-stone-400 text-sm" data-i18n="generating2">请稍候几秒</p>
     </section>
 
     <section id="s-result" class="hidden">
       <div class="text-center mb-5">
         <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center text-2xl">✓</div>
-        <h2 class="text-xl font-bold text-slate-800">你的回馈已经写好啦</h2>
-        <p class="text-stone-500 text-sm mt-1">选一个平台,可直接修改文字</p>
+        <h2 class="text-xl font-bold text-slate-800" data-i18n="result_title">你的回馈已经写好啦</h2>
+        <p class="text-stone-500 text-sm mt-1" data-i18n="result_sub">选一个平台,可直接修改文字</p>
       </div>
       <div id="tabs" class="flex gap-2 mb-4 bg-stone-100 p-1 rounded-xl"></div>
       <div id="sec-review" class="hidden">
         <textarea id="review-text" rows="8" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none bg-stone-50"></textarea>
         <div id="result-stars" class="flex items-center gap-1 mt-3 justify-center text-xl"></div>
-        <div id="photo-reminder" class="hidden mt-4 bg-amber-50 rounded-xl p-3 text-sm text-amber-800">💡 别忘了发布时把你的照片一起上传哦!</div>
+        <div id="photo-reminder" class="hidden mt-4 bg-amber-50 rounded-xl p-3 text-sm text-amber-800" data-i18n="photo_reminder">💡 别忘了发布时把你的照片一起上传哦!</div>
         <div class="mt-6 space-y-3">
-          <button id="btn-copy-review" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-4 rounded-2xl">复制文案</button>
+          <button id="btn-copy-review" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-4 rounded-2xl" data-i18n="copy_review">复制文案</button>
           <a id="btn-publish" href="#" target="_blank" rel="noopener noreferrer" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl flex items-center justify-center">去 Facebook 发布 ↗</a>
         </div>
         <div id="review-hint" class="mt-4 text-xs text-amber-800 bg-amber-50 rounded-xl p-3 text-left leading-relaxed"></div>
       </div>
       <div id="sec-xhs" class="hidden">
-        <label class="block text-slate-700 text-sm font-medium mb-1">标题</label>
+        <label class="block text-slate-700 text-sm font-medium mb-1" data-i18n="xhs_title_label">标题</label>
         <input id="xhs-title" class="w-full px-4 py-3 mb-3 rounded-xl border border-stone-200 outline-none text-slate-700 bg-stone-50" />
-        <label class="block text-slate-700 text-sm font-medium mb-1">正文</label>
+        <label class="block text-slate-700 text-sm font-medium mb-1" data-i18n="xhs_body_label">正文</label>
         <textarea id="xhs-body" rows="9" class="w-full px-4 py-3 rounded-xl border border-stone-200 outline-none text-slate-700 resize-none bg-stone-50"></textarea>
-        <div class="mt-4 bg-rose-50 rounded-xl p-3 text-sm text-rose-700">📕 小红书要自己发笔记:复制全文 → 打开小红书 → 发新笔记 → 粘贴 + 配上你的照片</div>
+        <div class="mt-4 bg-rose-50 rounded-xl p-3 text-sm text-rose-700" data-i18n="xhs_note">📕 小红书要自己发笔记:复制全文 → 打开小红书 → 发新笔记 → 粘贴 + 配上你的照片</div>
         <div class="mt-5 space-y-3">
-          <button id="btn-copy-xhs" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-4 rounded-2xl">复制标题 + 正文</button>
-          <a href="https://www.xiaohongshu.com" target="_blank" rel="noopener noreferrer" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl flex items-center justify-center">打开小红书 ↗</a>
+          <button id="btn-copy-xhs" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-medium py-4 rounded-2xl" data-i18n="copy_xhs">复制标题 + 正文</button>
+          <a id="open-xhs" href="https://www.xiaohongshu.com" target="_blank" rel="noopener noreferrer" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-4 rounded-2xl flex items-center justify-center" data-i18n="open_xhs">打开小红书 ↗</a>
         </div>
       </div>
-      <div class="mt-5 bg-amber-50 rounded-xl p-3 text-xs text-amber-800 text-center leading-relaxed">💡 也想发到其他平台?发完回来,点上方标签切换即可,文案都还在 🌿</div>
-      <button id="btn-reset" class="w-full mt-4 text-stone-400 text-sm">完成 · 返回首页</button>
+      <div class="mt-5 bg-amber-50 rounded-xl p-3 text-xs text-amber-800 text-center leading-relaxed" data-i18n="switch_hint">💡 也想发到其他平台?发完回来,点上方标签切换即可,文案都还在 🌿</div>
+      <button id="btn-reset" class="w-full mt-4 text-stone-400 text-sm" data-i18n="done">完成 · 返回首页</button>
     </section>
 
   </div>
@@ -105,9 +107,57 @@
   var FB_NAME="christine NLP 智慧私塾";
   var GOOGLE_LINK="";
 
-  var COURSES=["《把心安顿好》工作坊","NLP 执行师认证课程","一对一咨询 / 教练","心理资本工作坊","其他"];
-  var state={course:"",rating:0,images:[],platform:"fb",review:"",xhsTitle:"",xhsBody:""};
+  var COURSES=[
+    {zh:"《把心安顿好》工作坊", en:"NLP Self-Exploration Workshop"},
+    {zh:"NLP 执行师认证课程", en:"NLP Practitioner Certification"},
+    {zh:"一对一咨询 / 教练", en:"1-on-1 Consultation / Coaching"},
+    {zh:"心理资本工作坊", en:"Psychological Capital Workshop"},
+    {zh:"其他", en:"Other"}
+  ];
 
+  var T={
+    zh:{
+      welcome_title:"谢谢你的同行 🌿", welcome_l1:"花 2 分钟,简单回答几个问题", welcome_l2:"让我帮你把这趟旅程的收获,整理成一段真心话",
+      start:"开始 →", back:"← 返回", course_label:"你上的是哪一个课程?", custom_ph:"请输入课程名称",
+      q_part:"课程中,哪个部分或练习让你最有收获?", q_part_ph:"例如:某个练习、某个观念,让我印象很深…",
+      q_teacher:"你最欣赏 Christine 老师带课的哪一点?", q_teacher_ph:"例如:很有耐心、讲解清楚、很会带气氛…",
+      q_gain:"上完课后,你最大的收获是什么?", q_gain_ph:"例如:学到实用的方法、看事情更清楚、更懂得照顾自己…",
+      q_rec:"你会推荐给什么样的人?", q_rec_ph:"例如:想成长、想更认识自己、想学新方法的朋友…",
+      rate_label:"为这次课程打个分", photo_label:"上传照片", photo_opt:"(选填)", generate:"✨ 生成我的回馈",
+      form_err:"请填写带 * 的必填项(课程、最有收获的部分、最大的收获、评分)", gen_err:"生成时遇到一点状况,请再试一次。",
+      generating1:"正在帮你整理这段心里话…", generating2:"请稍候几秒",
+      result_title:"你的回馈已经写好啦", result_sub:"选一个平台,可直接修改文字", photo_reminder:"💡 别忘了发布时把你的照片一起上传哦!",
+      copy_review:"复制文案", copied:"✓ 已复制!", fb_btn:"去 Facebook 发布 ↗", google_btn:"去 Google 发布 ↗",
+      fb_hint:"① 复制文案 ② 点按钮打开 Facebook ③ 若看到的是你自己的 FB,请在搜索栏搜「"+FB_NAME+"」进我的专页 ④ 点 More(更多)→ 推荐 → 粘贴发布 ❤",
+      google_hint:"复制文案 → 点按钮直达评论框 → 打星 → 粘贴并发布 ❤",
+      xhs_title_label:"标题", xhs_body_label:"正文", xhs_note:"📕 小红书要自己发笔记:复制全文 → 打开小红书 → 发新笔记 → 粘贴 + 配上你的照片",
+      copy_xhs:"复制标题 + 正文", copied_xhs:"✓ 已复制全文!", open_xhs:"打开小红书 ↗",
+      switch_hint:"💡 也想发到其他平台?发完回来,点上方标签切换即可,文案都还在 🌿", done:"完成 · 返回首页",
+      tab_xhs:"小红书"
+    },
+    en:{
+      welcome_title:"Thank you for walking this journey 🌿", welcome_l1:"Take 2 minutes to answer a few simple questions", welcome_l2:"and I will help turn what you gained into a few heartfelt words",
+      start:"Start →", back:"← Back", course_label:"Which course did you attend?", custom_ph:"Enter the course name",
+      q_part:"Which part or exercise did you gain the most from?", q_part_ph:"e.g. a certain exercise or idea that really stayed with me…",
+      q_teacher:"What do you most appreciate about Teacher Christine?", q_teacher_ph:"e.g. patient, explains clearly, great at setting the mood…",
+      q_gain:"What is the biggest thing you took away from the course?", q_gain_ph:"e.g. practical methods, seeing things more clearly, taking better care of myself…",
+      q_rec:"Who would you recommend it to?", q_rec_ph:"e.g. friends who want to grow, understand themselves better, or learn new approaches…",
+      rate_label:"Rate this course", photo_label:"Upload photos", photo_opt:"(optional)", generate:"✨ Generate my review",
+      form_err:"Please fill in the required fields marked * (course, most valuable part, biggest takeaway, rating)", gen_err:"Something went wrong while generating. Please try again.",
+      generating1:"Putting your thoughts into words…", generating2:"Just a few seconds",
+      result_title:"Your review is ready", result_sub:"Pick a platform — you can edit the text directly", photo_reminder:"💡 Do not forget to add your photos when you post!",
+      copy_review:"Copy review", copied:"✓ Copied!", fb_btn:"Post on Facebook ↗", google_btn:"Post on Google ↗",
+      fb_hint:"① Copy the review ② Tap the button to open Facebook ③ If you land on your own FB, search '"+FB_NAME+"' to open my Page ④ Tap More → Reviews → paste and post ❤",
+      google_hint:"Copy the review → tap to open the review box → rate → paste and post ❤",
+      xhs_title_label:"Title", xhs_body_label:"Body", xhs_note:"📕 For Xiaohongshu, post it yourself: copy all → open Xiaohongshu → new note → paste + add your photos",
+      copy_xhs:"Copy title + body", copied_xhs:"✓ All copied!", open_xhs:"Open Xiaohongshu ↗",
+      switch_hint:"💡 Want to post on another platform too? Come back and tap the tab above — your text is still here 🌿", done:"Done · Back to start",
+      tab_xhs:"Xiaohongshu"
+    }
+  };
+
+  var lang="zh";
+  var state={courseIndex:-1,rating:0,images:[],platform:"fb",review:"",xhsTitle:"",xhsBody:""};
   function $(id){return document.getElementById(id);}
   function show(id){["s-welcome","s-form","s-generating","s-result"].forEach(function(s){$(s).classList.add("hidden");});$(id).classList.remove("hidden");window.scrollTo(0,0);}
 
@@ -126,23 +176,22 @@
   }
 
   var courseList=$("course-list");
-  COURSES.forEach(function(c){
+  COURSES.forEach(function(c,i){
     var b=document.createElement("button");
-    b.textContent=c;
+    b.textContent=c[lang];
     b.className="text-sm px-3 py-2.5 rounded-xl border text-left border-stone-200 text-stone-600";
     b.onclick=function(){
-      state.course=c;
+      state.courseIndex=i;
       Array.prototype.forEach.call(courseList.children,function(x){x.className="text-sm px-3 py-2.5 rounded-xl border text-left border-stone-200 text-stone-600";});
       b.className="text-sm px-3 py-2.5 rounded-xl border text-left border-orange-400 bg-orange-50 text-orange-700";
-      $("custom-course").classList.toggle("hidden", c!=="其他");
+      $("custom-course").classList.toggle("hidden", i!==COURSES.length-1);
     };
     courseList.appendChild(b);
   });
 
   var starsEl=$("stars");
   for(var i=1;i<=5;i++){(function(n){
-    var sp=document.createElement("span");
-    sp.textContent="★"; sp.style.cursor="pointer"; sp.className="text-stone-200";
+    var sp=document.createElement("span"); sp.textContent="★"; sp.style.cursor="pointer"; sp.className="text-stone-200";
     sp.onclick=function(){state.rating=n;updateStars();};
     starsEl.appendChild(sp);
   })(i);}
@@ -153,16 +202,11 @@
     var files=Array.prototype.slice.call(e.target.files||[]).slice(0,4);
     files.forEach(function(f){
       var reader=new FileReader();
-      reader.onload=function(ev){
-        var img=new Image();
-        img.onload=function(){
-          var scale=Math.min(1,900/img.width);var c=document.createElement("canvas");
-          c.width=img.width*scale;c.height=img.height*scale;
-          c.getContext("2d").drawImage(img,0,0,c.width,c.height);
-          if(state.images.length<4){state.images.push(c.toDataURL("image/jpeg",0.7));renderImages();}
-        };
-        img.src=ev.target.result;
-      };
+      reader.onload=function(ev){var img=new Image();img.onload=function(){
+        var scale=Math.min(1,900/img.width);var c=document.createElement("canvas");c.width=img.width*scale;c.height=img.height*scale;
+        c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+        if(state.images.length<4){state.images.push(c.toDataURL("image/jpeg",0.7));renderImages();}
+      };img.src=ev.target.result;};
       reader.readAsDataURL(f);
     });
     e.target.value="";
@@ -170,28 +214,31 @@
   function renderImages(){
     var el=$("img-list");el.innerHTML="";
     state.images.forEach(function(src,i){
-      var d=document.createElement("div");
-      d.className="relative w-20 h-20 rounded-xl overflow-hidden border border-stone-200";
+      var d=document.createElement("div");d.className="relative w-20 h-20 rounded-xl overflow-hidden border border-stone-200";
       d.innerHTML='<img src="'+src+'" class="w-full h-full object-cover"/>';
-      var rm=document.createElement("button");
-      rm.textContent="×";rm.className="absolute top-1 right-1 bg-black/50 rounded-full w-5 h-5 text-white text-xs";
+      var rm=document.createElement("button");rm.textContent="×";rm.className="absolute top-1 right-1 bg-black/50 rounded-full w-5 h-5 text-white text-xs";
       rm.onclick=function(){state.images.splice(i,1);renderImages();};
       d.appendChild(rm);el.appendChild(d);
     });
-    if(state.images.length<4){
-      var add=document.createElement("button");
-      add.textContent="📷";add.className="w-20 h-20 rounded-xl border-2 border-dashed border-stone-300 text-stone-400 text-2xl";
-      add.onclick=function(){$("file-input").click();};
-      el.appendChild(add);
-    }
+    if(state.images.length<4){var add=document.createElement("button");add.textContent="📷";add.className="w-20 h-20 rounded-xl border-2 border-dashed border-stone-300 text-stone-400 text-2xl";add.onclick=function(){$("file-input").click();};el.appendChild(add);}
   }
   renderImages();
 
+  function applyLang(){
+    $("lang-toggle").textContent=(lang==="zh")?"EN":"中";
+    document.querySelectorAll("[data-i18n]").forEach(function(el){var k=el.getAttribute("data-i18n");if(T[lang][k]!==undefined)el.textContent=T[lang][k];});
+    document.querySelectorAll("[data-i18n-ph]").forEach(function(el){var k=el.getAttribute("data-i18n-ph");if(T[lang][k]!==undefined)el.placeholder=T[lang][k];});
+    Array.prototype.forEach.call(courseList.children,function(b,i){b.textContent=COURSES[i][lang];});
+    if(!$("s-result").classList.contains("hidden")){buildTabs();renderPlatform();}
+  }
+  $("lang-toggle").onclick=function(){lang=(lang==="zh")?"en":"zh";applyLang();};
+
   $("btn-start").onclick=function(){show("s-form");};
+  $("btn-back").onclick=function(){show("s-welcome");};
   $("btn-reset").onclick=function(){resetAll();show("s-welcome");};
 
   function resetAll(){
-    state.course="";state.rating=0;state.images=[];state.platform="fb";state.review="";state.xhsTitle="";state.xhsBody="";
+    state.courseIndex=-1;state.rating=0;state.images=[];state.platform="fb";state.review="";state.xhsTitle="";state.xhsBody="";
     Array.prototype.forEach.call(courseList.children,function(x){x.className="text-sm px-3 py-2.5 rounded-xl border text-left border-stone-200 text-stone-600";});
     $("custom-course").value="";$("custom-course").classList.add("hidden");
     $("q-part").value="";$("q-teacher").value="";$("q-gain").value="";$("q-recommend").value="";
@@ -199,18 +246,22 @@
   }
 
   $("btn-generate").onclick=function(){
-    var finalCourse=state.course==="其他"?$("custom-course").value.trim():state.course;
+    var idx=state.courseIndex; var isOther=idx===COURSES.length-1;
+    var finalCourse=(idx<0)?"":(isOther?$("custom-course").value.trim():COURSES[idx][lang]);
     var part=$("q-part").value.trim(),gain=$("q-gain").value.trim();
-    if(!finalCourse||!part||!gain||state.rating<1){
-      var err=$("form-err");err.textContent="请填写带 * 的必填项(课程、最有收获的部分、最大的收获、评分)";err.classList.remove("hidden");window.scrollTo(0,0);return;
-    }
+    if(!finalCourse||!part||!gain||state.rating<1){var err=$("form-err");err.textContent=T[lang].form_err;err.classList.remove("hidden");window.scrollTo(0,0);return;}
     $("form-err").classList.add("hidden");
     doGenerate(finalCourse,part,$("q-teacher").value.trim(),gain,$("q-recommend").value.trim());
   };
 
   function doGenerate(course,part,teacher,gain,recommend){
     show("s-generating");
-    var prompt='你是帮学员整理"上课心得"的文案助手。这是一篇要公开张贴的好评,请只聚焦【课程内容、Christine 老师、学到的方法与收获、值得推荐之处】。绝对不要提及或暗示学员有任何心理、情绪问题或个人困扰,也不要写"我以前很焦虑/很自卑"这类暴露隐私的内容。\n\n课程:'+course+'\n最有收获的部分:'+part+'\n最欣赏老师的地方:'+(teacher||"(未填)")+'\n最大的收获:'+gain+'\n会推荐给:'+(recommend||"(未填)")+'\n评分:'+state.rating+' 星\n\n请严格按以下格式输出,不要有任何额外说明或开场白,三行标记必须原样出现:\n===REVIEW===\n第一人称好评,用于 Facebook / Google。简体中文,真诚自然有温度,像真实学员亲口说的,不浮夸、不 AI 腔。贴近 35-55 岁马来西亚华人女性口吻。重点写:课程哪里好、Christine 老师哪里好、自己学到或收获了什么、推荐给什么样的人。不要提及任何个人心理或情绪问题。约 120-200 字。\n===XHS_TITLE===\n小红书风格标题,口语化、有点击欲,可带 1-2 个 emoji,不超过 20 字。\n===XHS_BODY===\n小红书笔记正文,同样聚焦课程与收获、口语真诚,用 emoji 自然分段,不暴露任何个人问题,结尾放 4-5 个相关话题标签如 #自我成长 #NLP #把心安顿好 #终身学习。约 150-250 字。';
+    var prompt;
+    if(lang==="en"){
+      prompt='You are helping a student turn their course feedback into a public testimonial. Focus ONLY on the course content, Teacher Christine, what they learned and gained, and why it is worth recommending. Do NOT mention or imply any psychological or emotional problems or personal struggles, and do not write phrases about being anxious or insecure in the past that expose private issues.\n\nCourse: '+course+'\nMost valuable part: '+part+'\nWhat they appreciate about the teacher: '+(teacher||"(not provided)")+'\nBiggest takeaway: '+gain+'\nWould recommend to: '+(recommend||"(not provided)")+'\nRating: '+state.rating+' stars\n\nOutput strictly in the format below, no extra explanation, and the three marker lines must appear exactly:\n===REVIEW===\nA warm, sincere first-person review in natural English, like a real student, not exaggerated. Cover what is good about the course, what is good about Teacher Christine, what you learned or gained, and who you would recommend it to. Do not mention any personal psychological or emotional issues. About 80 to 150 words.\n===XHS_TITLE===\nA short catchy title, casual, may include 1 to 2 emojis, under 12 words.\n===XHS_BODY===\nA casual sincere social post in English, using emojis to separate short paragraphs, focused on the course and the gains, ending with 4 to 5 relevant hashtags such as #PersonalGrowth #NLP #SelfDiscovery #Mindset. About 100 to 180 words.';
+    }else{
+      prompt='你是帮学员整理"上课心得"的文案助手。这是一篇要公开张贴的好评,请只聚焦【课程内容、Christine 老师、学到的方法与收获、值得推荐之处】。绝对不要提及或暗示学员有任何心理、情绪问题或个人困扰,也不要写"我以前很焦虑/很自卑"这类暴露隐私的内容。\n\n课程:'+course+'\n最有收获的部分:'+part+'\n最欣赏老师的地方:'+(teacher||"(未填)")+'\n最大的收获:'+gain+'\n会推荐给:'+(recommend||"(未填)")+'\n评分:'+state.rating+' 星\n\n请严格按以下格式输出,不要有任何额外说明或开场白,三行标记必须原样出现:\n===REVIEW===\n第一人称好评,用于 Facebook / Google。简体中文,真诚自然有温度,像真实学员亲口说的,不浮夸、不 AI 腔。贴近 35-55 岁马来西亚华人女性口吻。重点写:课程哪里好、Christine 老师哪里好、自己学到或收获了什么、推荐给什么样的人。不要提及任何个人心理或情绪问题。约 120-200 字。\n===XHS_TITLE===\n小红书风格标题,口语化、有点击欲,可带 1-2 个 emoji,不超过 20 字。\n===XHS_BODY===\n小红书笔记正文,同样聚焦课程与收获、口语真诚,用 emoji 自然分段,不暴露任何个人问题,结尾放 4-5 个相关话题标签如 #自我成长 #NLP #把心安顿好 #终身学习。约 150-250 字。';
+    }
     fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:prompt})})
     .then(function(r){return r.json();})
     .then(function(data){
@@ -222,53 +273,37 @@
       state.xhsBody=grab("===XHS_BODY===",null);
       showResult();
     })
-    .catch(function(){
-      var err=$("form-err");err.textContent="生成时遇到一点状况,请再试一次。";err.classList.remove("hidden");show("s-form");window.scrollTo(0,0);
-    });
+    .catch(function(){var err=$("form-err");err.textContent=T[lang].gen_err;err.classList.remove("hidden");show("s-form");window.scrollTo(0,0);});
   }
 
   function tabIds(){var ids=["fb"];if(buildGoogleUrl(GOOGLE_LINK))ids.push("google");ids.push("xhs");return ids;}
   function buildTabs(){
-    var names={fb:"Facebook",google:"Google",xhs:"小红书"};
+    var names={fb:"Facebook",google:"Google",xhs:T[lang].tab_xhs};
     var el=$("tabs");el.innerHTML="";
-    tabIds().forEach(function(id){
-      var b=document.createElement("button");
-      b.textContent=names[id];
-      b.onclick=function(){state.platform=id;renderPlatform();};
-      el.appendChild(b);
-    });
+    tabIds().forEach(function(id){var b=document.createElement("button");b.textContent=names[id];b.onclick=function(){state.platform=id;renderPlatform();};el.appendChild(b);});
   }
   function renderPlatform(){
     var ids=tabIds();
-    Array.prototype.forEach.call($("tabs").children,function(b,idx){
-      b.className=(ids[idx]===state.platform)?"flex-1 text-sm py-2 rounded-lg font-medium bg-white text-slate-800 shadow-sm":"flex-1 text-sm py-2 rounded-lg font-medium text-stone-500";
-    });
+    Array.prototype.forEach.call($("tabs").children,function(b,idx){b.className=(ids[idx]===state.platform)?"flex-1 text-sm py-2 rounded-lg font-medium bg-white text-slate-800 shadow-sm":"flex-1 text-sm py-2 rounded-lg font-medium text-stone-500";});
     if(state.platform==="xhs"){$("sec-review").classList.add("hidden");$("sec-xhs").classList.remove("hidden");}
     else{
       $("sec-xhs").classList.add("hidden");$("sec-review").classList.remove("hidden");
-      if(state.platform==="fb"){
-        $("btn-publish").textContent="去 Facebook 发布 ↗";
-        $("btn-publish").href=FB_DEEPLINK||buildFbUrl(FB_PAGE);
-        $("review-hint").textContent="① 复制文案 ② 点按钮打开 Facebook ③ 若看到的是你自己的 FB,请在搜索栏搜「"+FB_NAME+"」进我的专页 ④ 点 More(更多)→ 推荐 → 粘贴发布 ❤";
-      }else{
-        $("btn-publish").textContent="去 Google 发布 ↗";
-        $("btn-publish").href=buildGoogleUrl(GOOGLE_LINK);
-        $("review-hint").textContent="复制文案 → 点按钮直达评论框 → 打星 → 粘贴并发布 ❤";
-      }
+      if(state.platform==="fb"){$("btn-publish").textContent=T[lang].fb_btn;$("btn-publish").href=FB_DEEPLINK||buildFbUrl(FB_PAGE);$("review-hint").textContent=T[lang].fb_hint;}
+      else{$("btn-publish").textContent=T[lang].google_btn;$("btn-publish").href=buildGoogleUrl(GOOGLE_LINK);$("review-hint").textContent=T[lang].google_hint;}
     }
   }
   function showResult(){
     $("review-text").value=state.review;$("xhs-title").value=state.xhsTitle;$("xhs-body").value=state.xhsBody;
-    renderResultStars();
-    $("photo-reminder").classList.toggle("hidden",state.images.length===0);
+    renderResultStars();$("photo-reminder").classList.toggle("hidden",state.images.length===0);
     buildTabs();state.platform="fb";renderPlatform();show("s-result");
   }
 
   function copyText(t){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(ta);}
-  $("btn-copy-review").onclick=function(){copyText($("review-text").value);var b=$("btn-copy-review");b.textContent="✓ 已复制!";setTimeout(function(){b.textContent="复制文案";},2000);};
-  $("btn-copy-xhs").onclick=function(){copyText($("xhs-title").value+"\n\n"+$("xhs-body").value);var b=$("btn-copy-xhs");b.textContent="✓ 已复制全文!";setTimeout(function(){b.textContent="复制标题 + 正文";},2000);};
+  $("btn-copy-review").onclick=function(){copyText($("review-text").value);var b=$("btn-copy-review");b.textContent=T[lang].copied;setTimeout(function(){b.textContent=T[lang].copy_review;},2000);};
+  $("btn-copy-xhs").onclick=function(){copyText($("xhs-title").value+"\n\n"+$("xhs-body").value);var b=$("btn-copy-xhs");b.textContent=T[lang].copied_xhs;setTimeout(function(){b.textContent=T[lang].copy_xhs;},2000);};
 
   updateStars();
+  applyLang();
 })();
 </script>
 </body>
